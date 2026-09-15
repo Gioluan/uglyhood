@@ -102,6 +102,7 @@ async function main() {
     }
     await sleep(PACE_MS);
   }
+  state.complete = true;   // only a bucket that reached its target may be trusted as a resume point
   save();
   console.log("done. logs=", state.stats.logs, "nodes=", Object.keys(nodes).length, "edges=", Object.keys(edges).length);
 }

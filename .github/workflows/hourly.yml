@@ -40,7 +40,12 @@ jobs:
             const fs = require("fs");
             let head = 0;
             for (const f of fs.readdirSync("indexer/buckets")) {
-              try { head = Math.max(head, JSON.parse(fs.readFileSync("indexer/buckets/" + f, "utf8")).head || 0); } catch {}
+              const p = "indexer/buckets/" + f;
+              let b = null;
+              try { b = JSON.parse(fs.readFileSync(p, "utf8")); } catch {}
+              // a bucket from a cancelled or crashed run is a hole in the window, not a resume point
+              if (!b || !b.complete) { console.log("discarding incomplete bucket", f); fs.unlinkSync(p); continue; }
+              head = Math.max(head, b.head || 0);
             }
             console.log(head ? "resuming after block " + head : "cold cache: full six-hour crawl");
             fs.appendFileSync(process.env.GITHUB_OUTPUT, "since=" + head + require("os").EOL);
@@ -73,7 +78,7 @@ jobs:
           "
 
       - name: Save hourly buckets
-        if: always()
+        if: success()
         uses: actions/cache/save@v4
         with:
           path: indexer/buckets
