@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>UGLYHOOD on ROBINHOOD</title>
+  <meta name="description" content="A live GPU map of who moves PONS, CASHCAT, Bundle Cat, GIGA, USDG and ETH on Robinhood Chain, wallet by wallet, plus the cemetery of coins that did not make it." />
+  <link rel="icon" href="/assets/ugly-logo-256.png" />
+  <meta property="og:title" content="UGLYHOOD on ROBINHOOD" />
+  <meta property="og:description" content="Every wallet, every transfer, one map. Robinhood Chain memecoins rendered on your GPU." />
+  <meta property="og:image" content="/assets/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <script>(function(){var q=new URLSearchParams(location.search);var skin=q.get("skin");if(skin)document.documentElement.dataset.skin=skin;if(q.get("embed"))document.documentElement.dataset.embed="1";if(skin==="ledger"){var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap";document.head.appendChild(l);}})();</script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="https://uglyonrobinhood.com" target="_blank" rel="noopener">
+      <img src="/assets/ugly-logo-256.png" alt="UGLY" width="40" height="40" />
+    </a>
+    <div class="title">
+      <h1><span class="neon">UGLYHOOD</span> <span class="on">on</span> ROBINHOOD</h1>
+      <p class="tag">who moves the coins on Robinhood Chain, wallet by wallet, drawn by your GPU</p>
+    </div>
+    <nav class="links">
+      <a href="https://uglyonrobinhood.com/run" target="_blank" rel="noopener">UGLY RUN</a>
+      <a href="https://thepondstreetledger.com/robinhood-chain" target="_blank" rel="noopener">LEDGER</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="map-wrap" id="map-wrap">
+      <canvas id="map" aria-label="Wallet interaction map"></canvas>
+      <div id="labels" class="labels" aria-hidden="true"></div>
+
+      <div class="hud hud-left">
+        <div class="card stats" id="stats">
+          <div class="k">LOADING CHAIN DATA</div>
+          <div class="bar"><span></span></div>
+        </div>
+        <div class="card legend" id="legend"></div>
+      </div>
+
+      <div class="hud hud-right">
+        <form class="card find" id="find" autocomplete="off">
+          <label class="k" for="find-addr">FIND A WALLET</label>
+          <div class="find-row">
+            <input id="find-addr" type="text" inputmode="text" spellcheck="false" placeholder="0x… paste an address" />
+            <button class="btn" type="submit">GO</button>
+          </div>
+          <div class="find-msg" id="find-msg"></div>
+        </form>
+        <div class="card hover" id="hover" hidden></div>
+        <div class="btns">
+          <button class="btn" id="fit" type="button">FIT</button>
+          <button class="btn" id="shake" type="button">SHAKE</button>
+          <button class="btn" id="pause" type="button">PAUSE</button>
+        </div>
+      </div>
+
+      <a class="corner" href="https://uglyonrobinhood.com" target="_blank" rel="noopener" id="corner"><img src="/assets/ugly-logo-256.png" alt="" width="18" height="18" /> Presented by UGLY</a>
+      <div class="card nogpu" id="nogpu" hidden>
+        <div class="k">NO WEBGPU HERE</div>
+        <p>This map runs on WebGPU. Open it in a current Chrome, Edge, Safari or Firefox on desktop, or a recent phone.</p>
+      </div>
+    </section>
+
+    <section class="how">
+      <div class="card">
+        <div class="k">HOW TO READ IT</div>
+        <ul>
+          <li><b>Dots</b> are wallets and contracts. Bigger means more volume in the window.</li>
+          <li><b>Lines</b> are transfers between two addresses. Brighter means more of them.</li>
+          <li><b>Sparks</b> travel from sender to receiver along the most recent transfers.</li>
+          <li><b>Green rings</b> mark liquidity pools. Big hubs are routers, pool managers and the mint address.</li>
+          <li>Colour is the coin each address moves most. Toggle coins in the legend, drag to pan, scroll to zoom, hover for details.</li>
+          <li><b>Find a wallet</b> flies to any address. If it is not on the map yet, its last six hours of moves are pulled from the chain and it lands next to its counterparties.</li>
+          <li><b>Live</b> means it: every few seconds the page reads the newest blocks, and fresh transfers run bright from sender to receiver.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cemetery" id="cemetery">
+      <div class="cem-head">
+        <h2>CEMETERY OF COINS</h2>
+        <p class="tag" id="cem-tag">every token born on Robinhood Chain, one stone per 500 coins. green stones still trade.</p>
+      </div>
+      <canvas id="graves" aria-label="Cemetery of tokens"></canvas>
+      <div class="cem-weeks" id="cem-weeks"></div>
+      <div class="cem-stats" id="cem-stats"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Data read straight from Robinhood Chain RPC (chain id 4663): ERC-20 Transfer events for PONS, CASHCAT, BUN, GIGA, USDG and WETH. Pool names from DexScreener. Cemetery counts from The Pond Street Ledger nursery, built from Uniswap v4 pool births. ETH shows as WETH because native ETH moves leave no event log.</p>
+    <p>An <a href="https://uglyonrobinhood.com" target="_blank" rel="noopener">UGLY</a> experiment. Rendered with WebGPU via vgpu. Nothing here is financial advice, it is a picture.</p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

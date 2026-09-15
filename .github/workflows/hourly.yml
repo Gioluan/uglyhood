@@ -1,0 +1,87 @@
+name: Refresh the hoods
+
+# Every hour: read the transfers that landed since the last run, fold them into
+# the six-hour window, export the graph and the summary, and redeploy the map.
+# Raw hourly buckets live in the Actions cache (they are 20 MB an hour and do
+# not belong in git); if the cache is cold the job crawls the whole window,
+# which takes about half an hour on the public RPC.
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: hoods
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 58
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+
+      - name: Restore hourly buckets
+        uses: actions/cache/restore@v4
+        with:
+          path: indexer/buckets
+          key: hoods-buckets-${{ github.run_id }}
+          restore-keys: hoods-buckets-
+
+      - name: Where did the last run stop?
+        id: since
+        run: |
+          mkdir -p indexer/buckets
+          node -e '
+            const fs = require("fs");
+            let head = 0;
+            for (const f of fs.readdirSync("indexer/buckets")) {
+              try { head = Math.max(head, JSON.parse(fs.readFileSync("indexer/buckets/" + f, "utf8")).head || 0); } catch {}
+            }
+            console.log(head ? "resuming after block " + head : "cold cache: full six-hour crawl");
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, "since=" + head + require("os").EOL);
+          '
+
+      - name: Crawl the chain
+        env:
+          SINCE: ${{ steps.since.outputs.since }}
+          HOURS: "6"
+          PACE_MS: "1200"
+          WIN: "300"
+        run: OUT=indexer/buckets/b-$(date -u +%Y%m%d-%H%M).json node indexer/crawl.mjs
+
+      - name: Fetch the nursery for the cemetery
+        run: |
+          mkdir -p indexer/external
+          curl -sfL "https://www.pondstreetledger.com/data/nursery.json" -o indexer/external/nursery.json || echo "nursery unavailable, cemetery keeps the last snapshot"
+
+      - name: Export graph and summary
+        env:
+          NURSERY: indexer/external/nursery.json
+        run: node indexer/export.mjs
+
+      - name: Sanity check before deploying
+        run: |
+          node -e "
+            const s = require('./public/data/summary.json');
+            console.log('window ' + s.window.hours + 'h, transfers ' + s.totals.transfers + ', wallets ' + s.totals.wallets);
+            if (s.window.hours < 3 || s.totals.transfers < 100000) { console.error('Window came back short. Not deploying.'); process.exit(1); }
+          "
+
+      - name: Save hourly buckets
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: indexer/buckets
+          key: hoods-buckets-${{ github.run_id }}
+
+      - name: Deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx --yes vercel@latest --prod --yes --token "$VERCEL_TOKEN"

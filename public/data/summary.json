@@ -1,0 +1,189 @@
+{
+ "chainId": 4663,
+ "window": {
+  "headBlock": 63877515,
+  "lowBlock": 63648890,
+  "blocks": 228625,
+  "hours": 6.45,
+  "exported": "2026-09-15T22:22:10.465Z"
+ },
+ "totals": {
+  "transfers": 3581021,
+  "wallets": 60365,
+  "edges": 170308
+ },
+ "kept": {
+  "nodes": 6000,
+  "edges": 36578,
+  "flows": 4000
+ },
+ "tokens": [
+  "CASHCAT",
+  "BUN",
+  "USDG",
+  "WETH",
+  "GIGA",
+  "PONS"
+ ],
+ "hoods": [
+  {
+   "coin": "USDG",
+   "transfers": 1783837,
+   "wallets": 42713
+  },
+  {
+   "coin": "WETH",
+   "transfers": 1674791,
+   "wallets": 14582
+  },
+  {
+   "coin": "PONS",
+   "transfers": 97486,
+   "wallets": 6879
+  },
+  {
+   "coin": "CASHCAT",
+   "transfers": 22939,
+   "wallets": 2715
+  },
+  {
+   "coin": "BUN",
+   "transfers": 1601,
+   "wallets": 317
+  },
+  {
+   "coin": "GIGA",
+   "transfers": 367,
+   "wallets": 77
+  }
+ ],
+ "movers": [
+  {
+   "addr": "0x51c72848c68a965f66fa7a88855f9f7784502a7f",
+   "transfers": 66614,
+   "counterparties": 57,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0x278d858f05b94576c1e6f73285886876ff6ef8d2",
+   "transfers": 69423,
+   "counterparties": 99,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0xcef7501b9b060a599a81735bead6641c0e6baf46",
+   "transfers": 45433,
+   "counterparties": 59,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0xc33acc93942105c57602e59e8e448c20ba718a85",
+   "transfers": 36275,
+   "counterparties": 44,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0x907d1d174569b11624bdcefd20dcef27600237f8",
+   "transfers": 5879,
+   "counterparties": 9,
+   "coin": "CASHCAT"
+  },
+  {
+   "addr": "0x51b83f8e3bc0d2e2ecd7755cc0c5e01a1c86bd62",
+   "transfers": 9649,
+   "counterparties": 24,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0x43c8976ddee758277229427dda4da305a7ae3dba",
+   "transfers": 9062,
+   "counterparties": 129,
+   "coin": "CASHCAT"
+  },
+  {
+   "addr": "0x039ec98a76f111092d4751365ff09dd2aec301e8",
+   "transfers": 44713,
+   "counterparties": 65,
+   "coin": "PONS"
+  },
+  {
+   "addr": "0xf43acc02778267bd44ce4a2b7a5b7dfd8e683e74",
+   "transfers": 5030,
+   "counterparties": 22,
+   "coin": "CASHCAT"
+  },
+  {
+   "addr": "0x55555522005bcae1c2424d474bfd5ed477749e3e",
+   "transfers": 3976,
+   "counterparties": 6,
+   "coin": "CASHCAT"
+  }
+ ],
+ "hubs": [
+  {
+   "addr": "0x8366a39cc670b4001a1121b8f6a443a643e40951",
+   "label": "Uniswap v4 PoolManager",
+   "role": "pool",
+   "transfers": 495884,
+   "counterparties": 1778
+  },
+  {
+   "addr": "0x6aa80dbbed9ae5ab45fbf61f9644fada3b29326e",
+   "label": null,
+   "role": "hub",
+   "transfers": 268427,
+   "counterparties": 1056
+  },
+  {
+   "addr": "0x8f10b468b06c6fd214b65f87778827f7d113f996",
+   "label": null,
+   "role": "hub",
+   "transfers": 275684,
+   "counterparties": 1021
+  },
+  {
+   "addr": "0xb92fe925dc43a0ecde6c8b1a2709c170ec4fff4f",
+   "label": null,
+   "role": "hub",
+   "transfers": 332359,
+   "counterparties": 858
+  },
+  {
+   "addr": "0x8876789976decbfcbbbe364623c63652db8c0904",
+   "label": null,
+   "role": "hub",
+   "transfers": 125838,
+   "counterparties": 546
+  },
+  {
+   "addr": "0x52e65b17fb6e5ba00ed806f37afcd2daa50271ca",
+   "label": null,
+   "role": "hub",
+   "transfers": 606089,
+   "counterparties": 1048
+  },
+  {
+   "addr": "0x65050a9b7e5075a2ba5ced7b1b64ee66262c40dc",
+   "label": null,
+   "role": "hub",
+   "transfers": 701865,
+   "counterparties": 651
+  },
+  {
+   "addr": "0x0000000000000000000000000000000000000000",
+   "label": "Mint / Burn",
+   "role": "system",
+   "transfers": 807422,
+   "counterparties": 655
+  }
+ ],
+ "cemetery": {
+  "tokensBorn": 483496,
+  "updated": "2026-09-15T10:31:08.486Z",
+  "medianLife": {
+   "withinHours": 12,
+   "label": "6 to 12h",
+   "survivalPct": 36
+  }
+ }
+}

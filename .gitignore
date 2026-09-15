@@ -1,0 +1,8 @@
+node_modules
+dist
+indexer/graph-raw*.json*
+indexer/*.log
+.vercel
+
+.vercel
+indexer/buckets/
