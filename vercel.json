@@ -1,6 +1,26 @@
 {
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/thehoods/",
+      "permanent": false
+    },
+    {
+      "source": "/thehoods",
+      "destination": "/thehoods/",
+      "permanent": false
+    }
+  ],
   "headers": [
-    { "source": "/data/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=300, s-maxage=300" }] }
+    {
+      "source": "/thehoods/data/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=300"
+        }
+      ]
+    }
   ]
 }

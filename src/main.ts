@@ -36,7 +36,7 @@ let cemPass: ((f: FrameLike) => void) | null = null;
 
 async function main() {
   if (!("gpu" in navigator)) { $("nogpu").hidden = false; $("stats").hidden = true; return; }
-  const [gpu, graph] = await Promise.all([init(), fetch("/data/graph.json").then((r) => r.json() as Promise<Graph>)]);
+  const [gpu, graph] = await Promise.all([init(), fetch(import.meta.env.BASE_URL + "data/graph.json").then((r) => r.json() as Promise<Graph>)]);
   const canvas = $<HTMLCanvasElement>("map");
   const surf = surface(gpu, canvas, { dpr: [1, 2] });
   const T = graph.tokens.length;
